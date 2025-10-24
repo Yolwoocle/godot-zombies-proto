@@ -2,11 +2,16 @@ extends Area2D
 class_name Hitbox
 
 @export var damage: float = 1.0
-signal sent_damage(area: Hitbox)
+signal sent_damage(hurtbox: Hurtbox)
 
 func _ready() -> void:
 	pass
 
-func on_damage_sent(hurt_box: Hurtbox):
-	print("SENT DAMANGE")
-	sent_damage.emit(hurt_box)
+func _physics_process(delta: float) -> void:
+	var areas = get_overlapping_areas()
+	
+	for area in areas:
+		if area is Hurtbox and area.is_hittable(self):
+			var hurtbox = area as Hurtbox
+			hurtbox.on_recieve_damage(self)
+			sent_damage.emit(hurtbox)

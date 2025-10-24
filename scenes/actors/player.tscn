@@ -1,0 +1,98 @@
+[gd_scene load_steps=10 format=3 uid="uid://qndc0rwvq3e0"]
+
+[ext_resource type="Script" uid="uid://dxbu5muke5yms" path="res://scenes/actors/player.gd" id="1_g2els"]
+[ext_resource type="PackedScene" uid="uid://cdkvkbstvh6ef" path="res://scenes/components/life_component.tscn" id="2_dqkch"]
+[ext_resource type="PackedScene" uid="uid://bk2oqqxxglu2n" path="res://scenes/components/hurtbox.tscn" id="4_qlg0r"]
+[ext_resource type="Texture2D" uid="uid://bloepw68dia0r" path="res://assets/textures/test_player.png" id="4_tuyoq"]
+[ext_resource type="PackedScene" uid="uid://b0lakvvf8ga2n" path="res://scenes/weapons/guns/revolver.tscn" id="6_tuyoq"]
+[ext_resource type="Script" uid="uid://b1v2m3n4uho1c" path="res://scenes/actors/player_debug.gd" id="7_fjrip"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fjrip"]
+radius = 21.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7860b"]
+radius = 21.095022
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8y416"]
+radius = 24.0
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("weapon")]
+collision_layer = 8
+script = ExtResource("1_g2els")
+weapon = NodePath("Revolver")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("4_tuyoq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_fjrip")
+
+[node name="LifeComponent" parent="." instance=ExtResource("2_dqkch")]
+
+[node name="ActorCollisionArea" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ActorCollisionArea"]
+shape = SubResource("CircleShape2D_7860b")
+
+[node name="Hurtbox" parent="." node_paths=PackedStringArray("life_component") instance=ExtResource("4_qlg0r")]
+collision_layer = 8
+collision_mask = 0
+life_component = NodePath("../LifeComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("CircleShape2D_8y416")
+debug_color = Color(0.749436, 0.460069, 1.92523e-07, 0.42)
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -75.0
+offset_top = -70.0
+offset_right = 75.0
+offset_bottom = -18.0
+grow_horizontal = 2
+
+[node name="PlayerIndexLabel" type="Label" parent="HUD/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "P1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LifeBar" type="ProgressBar" parent="HUD/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 25)
+layout_mode = 2
+show_percentage = false
+
+[node name="LifeLabel" type="Label" parent="HUD/VBoxContainer/LifeBar"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 149.0
+offset_bottom = 23.0
+text = "5/5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Revolver" parent="." instance=ExtResource("6_tuyoq")]
+
+[node name="Debug" type="Node2D" parent="."]
+script = ExtResource("7_fjrip")

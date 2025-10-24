@@ -20,6 +20,9 @@ func _physics_process(delta: float) -> void:
 	
 	move_and_slide()
 
-func _on_hitbox_sent_damage(area: Hitbox) -> void:
-	print("DAMAGED ", area)
+func _on_hitbox_sent_damage(hurtbox: Hurtbox) -> void:
+	queue_free()
+
+
+func _on_wall_collider_body_entered(body: Node2D) -> void:
 	queue_free()

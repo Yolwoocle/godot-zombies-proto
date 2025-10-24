@@ -1,7 +1,11 @@
 extends CharacterBody2D
+class_name Player
 
-@export var gun: Gun = null
+@export var player_index = 1
+@export var weapon: Weapon = null
 @export var max_life: float = 5.0
+
+var direction := Vector2.RIGHT
 
 const ACCELERATION = 6000.0
 const DECELERATION = 4000.0
@@ -13,6 +17,8 @@ const INVINCIBILITY_TIME = 2.0
 
 func _ready() -> void:
 	life_component.max_life = max_life
+	
+	%PlayerIndexLabel.text = "P{0}".format([player_index])
 
 func _process(delta: float) -> void:
 	%LifeBar.max_value = max_life
@@ -24,16 +30,19 @@ func _process(delta: float) -> void:
 	else:
 		sprite.modulate = Color(1, 1, 1, 1.0)
 
+func _btn(action_name: String) -> String:
+	return "game_p{0}_{1}".format([player_index, action_name])
+
 func _physics_process(delta: float) -> void:
-	var direction := Input.get_vector("game_left", "game_right", "game_up", "game_down")
-	if direction:
-		velocity = velocity.move_toward(direction*SPEED, ACCELERATION*delta)
+	var input_direction := Input.get_vector(_btn("left"), _btn("right"), _btn("up"), _btn("down"))
+	if input_direction:
+		velocity = velocity.move_toward(input_direction*SPEED, ACCELERATION*delta)
+		direction = input_direction.normalized()
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, DECELERATION*delta)
 	
-	if Input.is_action_just_pressed("game_shoot"):
-		var dir = (get_global_mouse_position() - global_position).normalized()
-		_shoot(dir)
+	if Input.is_action_just_pressed(_btn("attack")):
+		_attack(direction)
 	
 	move_and_slide()
 
@@ -42,9 +51,9 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 
 ################################################
 
-func _shoot(direction: Vector2):
-	if gun:
-		gun.shoot(global_position, direction)
+func _attack(direction: Vector2):
+	if weapon:
+		weapon.attack(global_position, direction)
 
 ################################################
 

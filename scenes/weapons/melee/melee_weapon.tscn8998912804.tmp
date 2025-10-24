@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://cpydp0aeqjnbn"]
+
+[ext_resource type="Script" uid="uid://cs6w20yx62wjy" path="res://scenes/weapons/melee/melee_weapon.gd" id="1_h8in1"]
+[ext_resource type="Script" uid="uid://cyn16ubhn38rx" path="res://scenes/components/hitbox.gd" id="2_xwsiv"]
+[ext_resource type="Texture2D" uid="uid://dwrncqpg8ae35" path="res://assets/textures/test_attack_swing.png" id="3_f84jc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0ri5w"]
+size = Vector2(117, 52)
+
+[node name="MeleeWeapon" type="Node2D"]
+script = ExtResource("1_h8in1")
+
+[node name="Hitbox" type="Area2D" parent="."]
+script = ExtResource("2_xwsiv")
+metadata/_custom_type_script = "uid://cyn16ubhn38rx"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(58.5, 0)
+shape = SubResource("RectangleShape2D_0ri5w")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(59, 5.68434e-14)
+scale = Vector2(1.85714, 1.85714)
+texture = ExtResource("3_f84jc")
+
+[node name="CooldownTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AttackTimer" type="Timer" parent="."]
+one_shot = true

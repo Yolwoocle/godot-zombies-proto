@@ -1,0 +1,117 @@
+[gd_scene load_steps=12 format=3 uid="uid://cllfxcqmt34or"]
+
+[ext_resource type="Script" uid="uid://bhx4rsfw8oige" path="res://scenes/actors/enemy.gd" id="1_7p1mj"]
+[ext_resource type="PackedScene" uid="uid://cdkvkbstvh6ef" path="res://scenes/components/life_component.tscn" id="2_c4w8v"]
+[ext_resource type="Texture2D" uid="uid://5562ngblgma" path="res://assets/textures/test_enemy.png" id="3_c4w8v"]
+[ext_resource type="PackedScene" uid="uid://bk2oqqxxglu2n" path="res://scenes/components/hurtbox.tscn" id="3_xwavj"]
+[ext_resource type="Script" uid="uid://cyn16ubhn38rx" path="res://scenes/components/hitbox.gd" id="5_c4w8v"]
+[ext_resource type="Script" uid="uid://dlvvwvxni3b02" path="res://scenes/actors/enemy_debug.gd" id="6_iq6g4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c4w8v"]
+radius = 21.095
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_w7k3k"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ei073"]
+radius = 4.2426405
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_iq6g4"]
+radius = 39.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gwjt0"]
+radius = 19.026299
+
+[node name="Enemy" type="CharacterBody2D"]
+collision_layer = 0
+script = ExtResource("1_7p1mj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_c4w8v")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+debug_enabled = true
+
+[node name="LifeComponent" parent="." instance=ExtResource("2_c4w8v")]
+damage_cooldown = 0.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("3_c4w8v")
+
+[node name="ActorCollisionArea" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ActorCollisionArea"]
+shape = SubResource("CircleShape2D_w7k3k")
+
+[node name="VisionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VisionArea"]
+shape = SubResource("CircleShape2D_ei073")
+debug_color = Color(0, 0.6, 0.69803923, 0.11764706)
+
+[node name="Hurtbox" parent="." node_paths=PackedStringArray("life_component") instance=ExtResource("3_xwavj")]
+collision_layer = 4
+collision_mask = 0
+life_component = NodePath("../LifeComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("CircleShape2D_iq6g4")
+debug_color = Color(0.749436, 0.460069, 1.92523e-07, 0.42)
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+script = ExtResource("5_c4w8v")
+metadata/_custom_type_script = "uid://cyn16ubhn38rx"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("CircleShape2D_gwjt0")
+debug_color = Color(0.957281, 0.208323, 3.85046e-07, 0.42)
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="HUD"]
+layout_mode = 0
+offset_top = -51.0
+offset_right = 40.0
+offset_bottom = -28.0
+
+[node name="LifeBar" type="ProgressBar" parent="HUD"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -75.0
+offset_top = -87.0
+offset_right = 116.0
+offset_bottom = -60.0
+show_percentage = false
+
+[node name="LifeLabel" type="Label" parent="HUD"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -61.0
+offset_top = -86.0
+offset_right = 103.0
+offset_bottom = -63.0
+horizontal_alignment = 1
+
+[node name="Debug" type="Node2D" parent="."]
+script = ExtResource("6_iq6g4")
+draw_debug = false
+
+[connection signal="died" from="LifeComponent" to="." method="_on_life_component_died"]
