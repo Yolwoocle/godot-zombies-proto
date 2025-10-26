@@ -13,7 +13,7 @@ radius = 21.095
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_w7k3k"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_emg7u"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_ei073"]
 radius = 4.2426405
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_iq6g4"]
@@ -41,7 +41,7 @@ texture = ExtResource("3_c4w8v")
 
 [node name="ActorCollisionArea" parent="." instance=ExtResource("4_gwjt0")]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ActorCollisionArea"]
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="ActorCollisionArea"]
 shape = SubResource("CircleShape2D_w7k3k")
 
 [node name="VisionArea" type="Area2D" parent="."]
@@ -49,7 +49,7 @@ collision_layer = 0
 collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="VisionArea"]
-shape = SubResource("CircleShape2D_emg7u")
+shape = SubResource("CircleShape2D_ei073")
 debug_color = Color(0, 0.6, 0.69803923, 0.11764706)
 
 [node name="Hurtbox" parent="." node_paths=PackedStringArray("life_component") instance=ExtResource("3_xwavj")]

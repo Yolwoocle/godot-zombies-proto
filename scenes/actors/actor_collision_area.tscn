@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dou1fcuwks7qu"]
+
+[ext_resource type="Script" uid="uid://dbts4yl7akvyh" path="res://scenes/actors/actor_collision_area.gd" id="1_3tx6y"]
+
+[node name="ActorCollisionArea" type="Area2D"]
+collision_layer = 16
+collision_mask = 16
+script = ExtResource("1_3tx6y")

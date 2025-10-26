@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://qndc0rwvq3e0"]
+[gd_scene load_steps=11 format=3 uid="uid://qndc0rwvq3e0"]
 
 [ext_resource type="Script" uid="uid://dxbu5muke5yms" path="res://scenes/actors/player.gd" id="1_g2els"]
 [ext_resource type="PackedScene" uid="uid://cdkvkbstvh6ef" path="res://scenes/components/life_component.tscn" id="2_dqkch"]
+[ext_resource type="PackedScene" uid="uid://dou1fcuwks7qu" path="res://scenes/actors/actor_collision_area.tscn" id="4_7860b"]
 [ext_resource type="PackedScene" uid="uid://bk2oqqxxglu2n" path="res://scenes/components/hurtbox.tscn" id="4_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://bloepw68dia0r" path="res://assets/textures/test_player.png" id="4_tuyoq"]
 [ext_resource type="PackedScene" uid="uid://b0lakvvf8ga2n" path="res://scenes/weapons/guns/revolver.tscn" id="6_tuyoq"]
@@ -10,7 +11,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_fjrip"]
 radius = 21.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_7860b"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_xx81n"]
 radius = 21.095022
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8y416"]
@@ -29,12 +30,10 @@ shape = SubResource("CircleShape2D_fjrip")
 
 [node name="LifeComponent" parent="." instance=ExtResource("2_dqkch")]
 
-[node name="ActorCollisionArea" type="Area2D" parent="."]
-collision_layer = 16
-collision_mask = 16
+[node name="ActorCollisionArea2" parent="." instance=ExtResource("4_7860b")]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ActorCollisionArea"]
-shape = SubResource("CircleShape2D_7860b")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ActorCollisionArea2"]
+shape = SubResource("CircleShape2D_xx81n")
 
 [node name="Hurtbox" parent="." node_paths=PackedStringArray("life_component") instance=ExtResource("4_qlg0r")]
 collision_layer = 8
@@ -96,3 +95,5 @@ vertical_alignment = 1
 
 [node name="Debug" type="Node2D" parent="."]
 script = ExtResource("7_fjrip")
+
+[connection signal="recieved_damage" from="Hurtbox" to="." method="_on_hurtbox_recieved_damage"]

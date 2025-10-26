@@ -10,6 +10,8 @@ func _ready() -> void:
 	pass
 
 func on_recieve_damage(hitbox: Hitbox):
+	if not life_component.can_damage():
+		return
 	if life_component:
 		life_component.damage(hitbox.damage)
 	

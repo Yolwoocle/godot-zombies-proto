@@ -53,3 +53,6 @@ func is_in_cooldown() -> bool:
 
 func set_cooldown(value: float) -> void:
 	cooldown_value = value
+
+func can_damage():
+	return not is_in_cooldown()

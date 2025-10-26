@@ -1,9 +1,10 @@
-extends CharacterBody2D
+extends Actor
 class_name Player
 
 @export var player_index = 1
 @export var weapon: Weapon = null
 @export var max_life: float = 5.0
+@export var damage_knockback: float = 1000.0
 
 var direction := Vector2.RIGHT
 
@@ -16,6 +17,7 @@ const INVINCIBILITY_TIME = 2.0
 @onready var sprite = $Sprite2D
 
 func _ready() -> void:
+	super()
 	life_component.max_life = max_life
 	
 	%PlayerIndexLabel.text = "P{0}".format([player_index])
@@ -46,9 +48,6 @@ func _physics_process(delta: float) -> void:
 	
 	move_and_slide()
 
-func _on_hurtbox_area_entered(area: Area2D) -> void:
-	damage_self(1.0)
-
 ################################################
 
 func _attack(direction: Vector2):
@@ -57,10 +56,9 @@ func _attack(direction: Vector2):
 
 ################################################
 
+func _on_hurtbox_recieved_damage(area: Hitbox) -> void:
+	var impulse = (global_position - area.global_position).normalized() * damage_knockback
+	apply_impulse(impulse)
+
 func is_invincible():
 	return life_component.is_in_cooldown()
-
-func damage_self(amount: float):
-	if is_invincible():
-		return
-	life_component.damage(1.0)
